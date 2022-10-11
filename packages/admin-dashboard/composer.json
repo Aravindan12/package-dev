@@ -1,0 +1,54 @@
+{
+    "name": "sparkout/admin-dashboard",
+    "description": "testing purpose",
+    "keywords": [
+        "sparkout",
+        "admin-dashboard"
+    ],
+    "homepage": "https://github.com/sparkout/admin-dashboard",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "aravind",
+            "email": "aravind@mailinator.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "illuminate/support": "^8.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sparkout\\AdminDashboard\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Sparkout\\AdminDashboard\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sparkout\\AdminDashboard\\AdminDashboardServiceProvider"
+            ],
+            "aliases": {
+                "AdminDashboard": "Sparkout\\AdminDashboard\\AdminDashboardFacade"
+            }
+        }
+    }
+}
