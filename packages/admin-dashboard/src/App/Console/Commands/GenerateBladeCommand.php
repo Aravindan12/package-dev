@@ -38,10 +38,15 @@ class GenerateBladeCommand extends Command
 
         $this->controller($name);
         $this->model($name);
-    
+        $controllerName = ucfirst($name);
+        $route = Str::plural(strtolower($name));
         File::append(
             base_path('routes/api.php'),
-            'Route::resource(\'' . Str::plural(strtolower($name)) . "', '{$name}Controller');"
+            str_replace(
+                'controllerName',
+                '',
+                'Route::resource("' .$route. '",App\Http\Controllers\controllerName'.$controllerName.'Controller::class);'
+            )
         );
     }
 
@@ -52,21 +57,28 @@ class GenerateBladeCommand extends Command
 
     protected function blade($name)
     {
+        $bladeName = strtolower(Str::plural($name));
+        $controllerName = ucfirst($name);
+        $route = Str::plural(strtolower($name));
         $modelTemplate = str_replace(
             ['{{modelNamePluralLowerCase}}'],
-            [strtolower(Str::plural($name))],
+            [$bladeName],
             $this->getStub('Blade')
         );
-
-        file_put_contents(resource_path("views/{$name}.blade.php"), $modelTemplate);
+        file_put_contents(resource_path("views/{$bladeName}.blade.php"), $modelTemplate);
         File::append(
             base_path('routes/web.php'),
-            'Route::get(\'' . Str::plural(strtolower($name)) . "', [{$name}Controller::class, 'view']);"
+            str_replace(
+                'controllerName',
+                '',
+                'Route::get("' .$route. '",[App\Http\Controllers\controllerName'.$controllerName.'Controller::class, "view"]);'
+            )
         );
     }
 
     protected function model($name)
     {
+        $name = ucfirst($name);
         $modelTemplate = str_replace(
             ['{{modelName}}'],
             [$name],
@@ -79,6 +91,7 @@ class GenerateBladeCommand extends Command
 
     protected function controller($name)
     {
+        $controllerName = ucfirst($name);
         $controllerTemplate = str_replace(
             [
                 '{{modelName}}',
@@ -86,13 +99,13 @@ class GenerateBladeCommand extends Command
                 '{{modelNameSingularLowerCase}}'
             ],
             [
-                $name,
+                $controllerName,
                 strtolower(Str::plural($name)),
                 strtolower($name)
             ],
             $this->getStub('Controller')
         );
 
-        file_put_contents(app_path("/Http/Controllers/{$name}Controller.php"), $controllerTemplate);
+        file_put_contents(app_path("/Http/Controllers/{$controllerName}Controller.php"), $controllerTemplate);
     }
 }
